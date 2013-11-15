@@ -1,14 +1,10 @@
-/*global app*/
-(function(app, document) {
+$(document).ready(function() {
 
-	var model = new app.HelloModel({ id: document.location.hash.slice(1) });
+	var model = new HelloModel({ id: document.location.hash.slice(1) });
 	model.fetch();
 
-	$(document).ready(function() {
-		app.hello = new app.HelloView({
-			el: $('.hello').first(),
-			model: model
-		});
+	var hello = new HelloView({
+		el: $('.hello').first(),
+		model: model
 	});
-
-}(app, document));
+});

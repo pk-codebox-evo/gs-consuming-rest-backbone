@@ -1,6 +1,4 @@
-var app = app||{};
-
-app.HelloView = Backbone.View.extend({
+HelloView = Backbone.View.extend({
 	initialize: function() {
 		this.template = _.template($('#hello-template').html());
 		this.listenTo(this.model, 'change', this.render);
