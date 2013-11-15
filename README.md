@@ -151,11 +151,17 @@ Finally, there is the root DOM Node of the view.  The view will render the model
 </div>
 ```
 
-<a name="test"></a>
-Test the client
----------------
+<a name="run"></a>
+Run the client
+--------------
 
-You can now open the `index.html` page in your browser, where you see:
+You can now run the app using the Spring Boot CLI (Command Line Interface). Spring Boot includes an embedded Tomcat server, which offers a simple approach to serving web content. See [Building an Application with Spring Boot][gs-spring-boot] for more information about installing and using the CLI.
+
+```sh
+$ spring run app.groovy
+```
+
+Once the app starts, open http://localhost:8080 in your browser, where you see:
 
 ![Model data retrieved from the REST service is rendered into the DOM.](images/hello.png)
 
@@ -165,9 +171,10 @@ The ID value will increment each time you refresh the page.
 Summary
 -------
 
-Congratulations! You've just developed an Backbone client that consumes a Spring-based RESTful web service.
+Congratulations! You've just developed a Backbone client that consumes a Spring-based RESTful web service.
 
-[gs-rest-service]: /guides/gs-rest-service/
+[gs-rest-service]: /guides/gs/rest-service/
+[gs-spring-boot]: /guides/gs/spring-boot/
 [zip]: https://github.com/spring-guides/gs-consuming-rest-backbone/archive/master.zip
 [u-rest]: /understanding/REST
 [u-json]: /understanding/JSON
