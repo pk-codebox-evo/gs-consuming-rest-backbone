@@ -88,7 +88,7 @@ Next is the HTML template that your view uses to render the model data.  Note th
     <p>The ID is <%= id %></p>
     <p>The content is <%= content %></p>
 </script>
-```html
+```
 
 Finally, there is the root DOM Node of the view.  The view will render the model data, using the template, into this node:
 

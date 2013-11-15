@@ -1,13 +1,13 @@
-This guide walks you through writing a simple jQuery client that consumes a Spring MVC-based [RESTful web service][u-rest].
+This guide walks you through writing a simple Backbone client that consumes a Spring MVC-based [RESTful web service][u-rest].
 
 
 What you will build
 -------------------
 
-You will build a jQuery client that consumes a Spring-based RESTful web service.
+You will build a Backbone client that consumes a Spring-based RESTful web service.
 Specifically, the client will consume the service created in [Building a RESTful Web Servce][gs-rest-service].
 
-The jQuery client will be accessed by opening the `index.html` file in your browser, and will consume the service accepting requests at:
+The Backbone client will be accessed by opening the `index.html` file in your browser, and will consume the service accepting requests at:
 
     http://rest-service.guides.spring.io/greeting
 
@@ -17,7 +17,7 @@ The service will respond with a [JSON][u-json] representation of a greeting:
 {"id":1,"content":"Hello, World!"}
 ```
 
-The jQuery client will render the ID and content into the DOM.
+The client will render the ID and content into the DOM.
 
 
 What you will need
@@ -30,69 +30,159 @@ What you will need
 
 
 <a name="scratch"></a>
-Create a jQuery Controller
---------------------------
+Create a Backbone Model
+-----------------------
 
-First, you will create the jQuery controller module that will consume the REST service: 
+Backbone consumes data from a RESTful web services via models and collections.  First, you'll create a Backbone model that represents the data you want to consume from the REST service.
 
-`hello.js`
+`HelloModel.js`
 ```js
-$("document").ready(function() {
-    $.ajax({
-        url: "http://rest-service.guides.spring.io/greeting"
-    }).then(function(data) {
-       $('.greeting-id').append(data.id);
-       $('.greeting-content').append(data.content);
-    });
+var app = app||{};
+
+app.HelloModel = Backbone.Model.extend({
+	urlRoot: 'http://rest-service.guides.spring.io/greeting',
+	url: function() {
+		return this.urlRoot + '?name=' + this.id;
+	}
 });
 ```
 
-This controller module is represented as a simple JavaScript function. It uses jQuery's `$.ajax()` method to consume the REST service at http://rest-service.guides.spring.io/greeting. If successful, it will assign the JSON received to `data`, effectively making it a `Greeting` model object. The `id` and `content` are then appended to the `greeting-id` and `greeting-content` DOM elements respectively.
+The model extends Backbone's base Model, and sets the model's `urlRoot` to the REST service at http://rest-service.guides.spring.io/greeting.
 
-Note the use of the jQuery promise `.then()`. This directs jQuery to execute the anonymous function when the `$.ajax()` method completes, passing the `data` result from the completed AJAX request.
+Create a Backbone View
+----------------------
 
+Next, you'll create a Backbone view to render the data in your `HelloModel`.
+
+`HelloView.js`
+```js
+var app = app||{};
+
+app.HelloView = Backbone.View.extend({
+	initialize: function() {
+		this.template = _.template($('#hello-template').html());
+		this.listenTo(this.model, 'change', this.render);
+	},
+
+	render: function(){
+		this.$el.html(this.template(this.model.attributes));
+	}
+});
+```
+
+The view extends Backbone's base View.  The `initialize` method will be called when the view is instantiated.  It uses Underscore to compile a template that will be used to render the model data, saving the compiled template in `this.template`.
+
+Backbone automatically wraps the view's root DOM Node (which will be provided when instantiating the view) in jQuery and makes it available as `this.$el`.  The `render` method renders the compiled template, passing the model data, and then uses jQuery's `html()` method to insert the rendered output into the DOM.
+
+Create a Controller
+-------------------
+
+`hello.js`
+```js
+/*global app*/
+(function(app, document) {
+
+	var model = new app.HelloModel({ id: document.location.hash.slice(1) });
+	model.fetch();
+
+	$(document).ready(function() {
+		app.hello = new app.HelloView({
+			el: $('.hello').first(),
+			model: model
+		});
+	});
+
+}(app, document));
+```
+
+This controller instantiates a `HelloModel`, and then invokes its `fetch` method to fetch data from the REST service and populate the model's data fields.  Then it instantiates a `HelloView`, passing the DOM Node where it should render, and the model.  The view will automatically render the model using its compiled template.
 
 Create the Application Page
 ---------------------------
 
-Now that you have a jQuery controller, you will create the HTML page that will load the client into the user's web browser:
+Now that you have a model, view, and controller, you'll create the HTML page that will load the client into the user's web browser:
 
 `index.html`
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <html>
-    <head>
-        <title>Hello jQuery</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script src="hello.js"></script>
-    </head>
-
-    <body>
-        <div>
-            <p class="greeting-id">The ID is </p>
-            <p class="greeting-content">The content is </p>
-        </div>
-    </body>
+	<head>
+		<title>Hello Backbone</title>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
+		<script src="HelloModel.js"></script>
+		<script src="HelloView.js"></script>
+		<script src="hello.js"></script>
+		<script type="text/html" id="hello-template">
+			<p>The ID is <%= id %></p>
+			<p>The content is <%= content %></p>
+		</script>
+	</head>
+	<body>
+		<div class="hello">
+		</div>
+	</body>
 </html>
 ```
 
-Note the following two script tags within the `<head>` section.
+The first three script tags are used to load Backbone, jQuery, and Underscore.  Since Backbone depends on jQuery and Underscore, they must be loaded first.
 
 ```html
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
+```
+
+The next three script tags are used to load your model, view, and controller:
+
+```html
+<script src="HelloModel.js"></script>
+<script src="HelloView.js"></script>
 <script src="hello.js"></script>
 ```
 
-The first script tag loads the minified jQuery library (jquery.min.js) from a content delivery network (CDN) so that you don't have to download jQuery and place it in your project. It also loads the controller code (hello.js) from the application's path.
-
-Also note that the `<p>` tags include `class` attributes.
+Next is the HTML template that your view uses to render the model data.  Note that we use a script tag, with the type `text/html`.  This tells the browser not to try to execute the script tag as JavaScript.  It has an `id` so that it can be easily referenced from the view and compiled.
 
 ```html
-<p class="greeting-id">The ID is </p>
-<p class="greeting-content">The content is </p>
+<script type="text/html" id="hello-template">
+    <p>The ID is <%= id %></p>
+    <p>The content is <%= content %></p>
+</script>
 ```
 
-These `class` attributes help jQuery to reference the HTML elements and update the text with the values from the `id` and `content` properties of the JSON received from the REST service.
+Finally, there is the root DOM Node of the view.  The view will render the model data, using the template, into this node:
+
+```html
+<div class="hello">
+</div>
+```
+
+After making the modifications, your `index.html` should look like the completed version:
+
+`index.html`
+```html
+<!doctype html>
+<html>
+	<head>
+		<title>Hello Backbone</title>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
+		<script src="HelloModel.js"></script>
+		<script src="HelloView.js"></script>
+		<script src="hello.js"></script>
+		<script type="text/html" id="hello-template">
+			<p>The ID is <%= id %></p>
+			<p>The content is <%= content %></p>
+		</script>
+	</head>
+	<body>
+		<div class="hello">
+		</div>
+	</body>
+</html>
+```
 
 
 <a name="test"></a>
@@ -112,8 +202,7 @@ Summary
 Congratulations! You've just developed an jQuery client that consumes a Spring-based RESTful web service.
 
 [gs-rest-service]: /guides/gs-rest-service/
-[zip]: https://github.com/spring-guides/gs-consuming-rest-jquery/archive/master.zip
+[zip]: https://github.com/spring-guides/gs-consuming-rest-backbone/archive/master.zip
 [u-rest]: /understanding/REST
 [u-json]: /understanding/JSON
 [u-git]: /understanding/Git
-
