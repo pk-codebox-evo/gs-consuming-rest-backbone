@@ -158,33 +158,6 @@ Finally, there is the root DOM Node of the view.  The view will render the model
 </div>
 ```
 
-After making the modifications, your `index.html` should look like the completed version:
-
-`index.html`
-```html
-<!doctype html>
-<html>
-	<head>
-		<title>Hello Backbone</title>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
-		<script src="HelloModel.js"></script>
-		<script src="HelloView.js"></script>
-		<script src="hello.js"></script>
-		<script type="text/html" id="hello-template">
-			<p>The ID is <%= id %></p>
-			<p>The content is <%= content %></p>
-		</script>
-	</head>
-	<body>
-		<div class="hello">
-		</div>
-	</body>
-</html>
-```
-
-
 <a name="test"></a>
 Test the client
 ---------------
@@ -199,7 +172,7 @@ The ID value will increment each time you refresh the page.
 Summary
 -------
 
-Congratulations! You've just developed an jQuery client that consumes a Spring-based RESTful web service.
+Congratulations! You've just developed an Backbone client that consumes a Spring-based RESTful web service.
 
 [gs-rest-service]: /guides/gs-rest-service/
 [zip]: https://github.com/spring-guides/gs-consuming-rest-backbone/archive/master.zip
