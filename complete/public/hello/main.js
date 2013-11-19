@@ -3,7 +3,7 @@ define(function(require) {
 	var HelloView = require('./HelloView');
 	var $ = require('jquery');
 
-	var model = new HelloModel({ id: document.location.hash.slice(1) });
+	var model = new HelloModel({ id: document.location.search.slice(1) });
 	model.fetch();
 
 	$(document).ready(function() {

@@ -19,14 +19,97 @@ The service will respond with a [JSON][u-json] representation of a greeting:
 
 The client will render the ID and content into the DOM.
 
+You can customize the greeting with an optional *query string* in the url:
 
-What you will need
-------------------
+    http://localhost:8080/?User
+
+The code will send a parameter to the REST endpoint and
+render a custom greeting into the DOM.
+
+
+What you'll need
+----------------
 
  - About 15 minutes
  - A favorite text editor
  - A modern web browser
  - An internet connection
+ - Node.js and git pre-installed
+ - Bower installed as a global node.js package
+
+<a name="scratch"></a>
+<a name="initial"></a>
+Create bower configuration files
+---
+
+First, create a bower control file, `.bowerrc`.  This file tells bower
+where to put the JavaScript dependencies.  The `.bowerrc` file should
+be located at the root of the project (`gs-consuming-rest-backbone/initial`) and
+formatted as JSON:
+
+`.bowerrc`
+```bowerrc
+{
+    "directory": "public/lib"
+}
+```
+
+From a command prompt at the root of the project, run `bower init`.
+This will create a `bower.json` file that describes the
+JavaScript packages required by the project.  Bower will ask for several
+bits of information such as a project name, license, etc.  If in doubt,
+just press `Enter` to accept the defaults.
+
+Next, use bower to install Backbone (since we're using JavaScript modules, we'll use the AMD version of Backbone), jQuery and Lodash (an alternative to Underscore), and an AMD module loader such as curl.js.  From the command prompt, type:
+
+```
+bower install --save backbone-amd#~1
+```
+
+```
+bower install --save jquery#~2
+```
+
+```
+bower install --save lodash#~1
+```
+
+```
+bower install --save curl#~0.8
+```
+
+Bower will install these packages into the directory we listed
+in `.bowerrc`.  Since we specified the `--save` option, bower will
+store the package information in the `bower.json` file.
+
+When done, the `bower.json` file should have a "dependencies"
+object property that lists "backbone-amd", "jquery", "lodash", and "curl" as property names and their semver information as values:
+
+`bower.json`
+```json
+{
+	"name": "draft-consuming-rest-backbone.js",
+	"version": "0.0.1",
+	"authors": [
+		"Brian Cavalier <bcavalier@gopivotal.com>"
+	],
+	"license": "http://www.apache.org/licenses/LICENSE-2.0",
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"lib",
+		"test",
+		"tests"
+	],
+	"dependencies": {
+		"curl": "~0.8",
+		"backbone-amd": "~1",
+		"lodash": "~1",
+		"jquery": "~2"
+	}
+}
+```
 
 
 <a name="scratch"></a>
@@ -90,7 +173,7 @@ define(function(require) {
 	var HelloView = require('./HelloView');
 	var $ = require('jquery');
 
-	var model = new HelloModel({ id: document.location.hash.slice(1) });
+	var model = new HelloModel({ id: document.location.search.slice(1) });
 	model.fetch();
 
 	$(document).ready(function() {
