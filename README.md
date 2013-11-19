@@ -132,7 +132,7 @@ define(function(require) {
 });
 ```
 
-The model extends Backbone's base Model, and sets the model's `urlRoot` to the REST service at http://rest-service.guides.spring.io/greeting.
+The model extends Backbone's base Model, and sets the model's `urlRoot` to the REST service at http://rest-service.guides.spring.io/greeting.  Note that it also passes its `id` field as a url query parameter.  This is used to customize the greeting using the query string, as mentioned above (e.g. `http://localhost:8080/?User`)
 
 Create a Backbone View
 ----------------------
