@@ -112,6 +112,19 @@ Create a Controller
 
 This controller instantiates a `HelloModel`, and then invokes its `fetch` method to fetch data from the REST service and populate the model's data fields.  Then it instantiates a `HelloView`, passing the DOM Node where it should render, and the model.  The view will automatically render the model using its compiled template.
 
+Create a boot script
+---
+
+Next, create the boot script, `run.js`:
+
+<@snippet path="public/run.js" prefix="complete"/>
+
+This script configures the AMD loader: `curl.config()`.  The `main`
+configuration property tells curl.js where to find the application's
+main module, which will be fetched and evaluated automatically.
+The `packages` config object tells curl.js where to find modules
+in our application's packages or in third-party packages.
+
 Create the Application Page
 ---------------------------
 

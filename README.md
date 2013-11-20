@@ -188,6 +188,38 @@ define(function(require) {
 
 This controller instantiates a `HelloModel`, and then invokes its `fetch` method to fetch data from the REST service and populate the model's data fields.  Then it instantiates a `HelloView`, passing the DOM Node where it should render, and the model.  The view will automatically render the model using its compiled template.
 
+Create a boot script
+---
+
+Next, create the boot script, `run.js`:
+
+`public/run.js`
+```js
+var curl;
+(function () {
+
+	curl({
+		main: 'hello',
+		packages: {
+			// Your application's package
+			hello: { location: 'hello' },
+			// Third-party packages
+			curl: { location: 'lib/curl/src/curl' },
+			jquery: { location: 'lib/jquery/jquery', main: '.' },
+			Backbone: { location: 'lib/backbone-amd/backbone', main: '.' },
+			underscore: { location: 'lib/lodash/lodash', main: '.' }
+		}
+	});
+
+}());
+```
+
+This script configures the AMD loader: `curl.config()`.  The `main`
+configuration property tells curl.js where to find the application's
+main module, which will be fetched and evaluated automatically.
+The `packages` config object tells curl.js where to find modules
+in our application's packages or in third-party packages.
+
 Create the Application Page
 ---------------------------
 
