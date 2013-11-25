@@ -68,17 +68,8 @@ Next, use bower to install Backbone (since we're using JavaScript modules, we'll
 
 ----
 bower install --save backbone-amd#~1
-----
-
-----
 bower install --save jquery#~2
-----
-
-----
 bower install --save lodash#~1
-----
-
-----
 bower install --save curl#~0.8
 ----
 
@@ -95,8 +86,6 @@ object property that lists "backbone-amd", "jquery", "lodash", and "curl" as pro
 include::complete/bower.json[]
 ----
 
-
-[[scratch]]
 == Create a Backbone Model
 
 Backbone consumes data from a RESTful web services via models and collections.  First, you'll create a Backbone model that represents the data you want to consume from the REST service.
