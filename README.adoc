@@ -44,8 +44,8 @@ render a custom greeting into the DOM.
  - A favorite text editor
  - A modern web browser
  - An internet connection
- - Node.js and git pre-installed
- - Bower installed as a global node.js package
+ - Node.js and link:/understanding/Git[Git] pre-installed
+ - Bower installed as a global node.js link:/understanding/javascript-package-managers[JavaScript package]
 
 [[scratch]]
 [[initial]]
@@ -63,12 +63,13 @@ include::complete/.bowerrc[]
 ----
 
 From a command prompt at the root of the project, run `bower init`.
-This will create a `bower.json` file that describes the
-JavaScript packages required by the project.  Bower will ask for several
+This will create a `bower.json` file that describes each
+link:/understanding/javascript-package-managers[JavaScript package]
+required by the project.  Bower will ask for several
 bits of information such as a project name, license, etc.  If in doubt,
 just press `Enter` to accept the defaults.
 
-Next, use bower to install Backbone (since we're using JavaScript modules, we'll use the AMD version of Backbone), jQuery and Lodash (an alternative to Underscore), and an AMD module loader such as curl.js.  From the command prompt, type:
+Next, use bower to install Backbone (since we're using JavaScript modules, we'll use the AMD version of Backbone), jQuery and Lodash (an alternative to Underscore), and an link:/understanding/javascript-modules[AMD module] loader such as curl.js.  From the command prompt, type:
 
 ----
 bower install --save backbone-amd#~1
